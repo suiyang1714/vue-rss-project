@@ -3,16 +3,19 @@ import App from './App.vue'
 import Vuex from 'vuex'
 import router from './router/router'
 import store from './store'
-// import 'lib-flexible/flexible'
 import 'amfe-flexible'
+import moment from 'dayjs'
+import 'vant/lib/toast/style';
+import { Toast } from 'vant'
+
 require('./assets/base.css')
+const relativeTime = require('dayjs/plugin/relativeTime')
 
 Vue.use(Vuex)
-
-// import moment from 'dayjs'
-// Vue.prototype.$moment = moment;
-
 Vue.config.productionTip = false
+Vue.use(Toast)
+moment.extend(relativeTime)
+Vue.prototype.$moment = moment;
 
 new Vue({
   store,

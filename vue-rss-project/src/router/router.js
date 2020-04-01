@@ -11,6 +11,18 @@ export default new Router({
           path: "/",
           component: () => import("../pages/index.vue")
         },
+        {
+          path: "/rssList",
+          component: () => import("../pages/rssList/list.vue")
+        },
+        {
+          path: "/rssList/detail",
+          component: () => import("../pages/rssList/detail.vue")
+        },
+        {
+          path: "/rssList/custom",
+          component: () => import("../pages/rssList/custom.vue")
+        },
         { path: '*', component: NotFoundComponent }
     ]
 });

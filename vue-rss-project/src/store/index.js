@@ -9,7 +9,8 @@ Vue.use(Vuex)
 const createStore = () => {
   return new Vuex.Store({
     state: {
-      userInfo: {}
+      userInfo: {},
+      current: 0
     },
     getters,
     actions,
