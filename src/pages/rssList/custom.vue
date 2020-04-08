@@ -5,7 +5,7 @@
                 center
                 clearable
                 label="订阅源"
-                placeholder="请输入订阅源"
+                placeholder="请输入订阅源1"
         >
             <template #button>
                 <Button size="small" type="info" @click="onCheckRss()">检测Feed</Button>

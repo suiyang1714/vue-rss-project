@@ -6,7 +6,7 @@ import store from './store'
 import 'amfe-flexible'
 import moment from 'dayjs'
 import 'vant/lib/toast/style';
-import { Toast } from 'vant'
+import { Toast, Dialog } from 'vant'
 
 require('./assets/base.css')
 const relativeTime = require('dayjs/plugin/relativeTime')
@@ -14,6 +14,7 @@ const relativeTime = require('dayjs/plugin/relativeTime')
 Vue.use(Vuex)
 Vue.config.productionTip = false
 Vue.use(Toast)
+Vue.use(Dialog)
 moment.extend(relativeTime)
 Vue.prototype.$moment = moment;
 

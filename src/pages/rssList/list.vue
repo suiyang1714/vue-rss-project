@@ -1,23 +1,22 @@
 <template>
-    <div>
-        <div class="main">
-            <div class="item" v-for="(item, index) in feeds.items" :key="index" @click="onOpenDetail(item.content)">
-                <div class="item__status">
-                    <div class="logo" :style="'background-image: url(' + $route.query.ico +')'">{{feeds.title}}</div>
-                    <div class="time">{{$moment(item.isoDate).toNow()}}</div>
+    <div class="main">
+        <div class="item" v-for="(item, index) in feeds" :key="index" @click="onOpenDetail(item.content)">
+            <div class="item__status">
+                <div class="logo">
+                    <img class="img" :src="item.websiteId.ico" />
+                    <span class="txt">{{item.websiteId.title}}</span>
                 </div>
-                <div class="item__title">{{item.title}}</div>
-                <div class="item__content">{{item.contentSnippet}}</div>
+                <div class="time">{{$moment(item.isoDate).toNow()}}</div>
             </div>
+            <div class="item__title">{{item.title}}</div>
+            <div class="item__content">{{item.contentSnippet}}</div>
         </div>
     </div>
 </template>
 
 <script>
-    // import {Icon } from 'vant';
     export default {
         name: "index",
-        // components: {Icon},
         data() {
             return {
                 active: 0,
@@ -30,17 +29,17 @@
         },
         methods: {
             onGetRSSList () {
-                this.$store.dispatch('onGetRSSList', {
-                    feed: this.$route.query.rss
+                this.$store.dispatch('onGetRssSingle', {
+                    _id: this.$route.query.websiteId,
+                    size: 20,
+                    page: 1
                 })
                     .then(res => {
-                        console.log(res)
                         this.feeds = res.result
                     })
             },
             onOpenDetail (content) {
                 this.$router.push({path: '/rssList/detail', query: {content: content}})
-                // window.location.href = link
             }
         }
     }
@@ -60,11 +59,23 @@
                 justify-content: space-between;
                 font-size: 24px;
                 margin-bottom: 20px;
+                /*.logo {*/
+                    /*color: #ababab;*/
+                    /*padding-left: 30px;*/
+                    /*background: no-repeat left center;*/
+                    /*background-size: 24px 24px;*/
+                /*}*/
                 .logo {
-                    color: #ababab;
-                    padding-left: 30px;
-                    background: no-repeat left center;
-                    background-size: 24px 24px;
+                    display: flex;
+                    align-items: center;
+                    .img {
+                        width: 24px;
+                        height: 24px;
+                        margin-right: 10px;
+                    }
+                    .txt {
+                        color: #ababab;
+                    }
                 }
                 .time {
                     color: #a9a9a9

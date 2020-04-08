@@ -1,10 +1,10 @@
 <template>
     <div class="page">
         <div class="main" v-if="$store.state.current === 0">
-            <div class="item" v-for="(item, index) in feeds.items" :key="index" @click="onOpenDetail(item.link)">
+            <div class="item" v-for="(item, index) in feeds" :key="index" @click="onOpenDetail(item.link)">
                 <div class="item__status">
-                    <div class="logo" style="background-image: url('https://36kr.com/favicon.ico')">{{feeds.title}}</div>
-                    <div class="time">{{$moment(item.isoDate).toNow()}}</div>
+                    <div class="logo" :style="'background-image: url(' + item.websiteId.ico + ')'">{{item.websiteId.title}}</div>
+                    <div class="time">{{$moment(item.pubDate).toNow()}}</div>
                 </div>
                 <div class="item__title">{{item.title}}</div>
                 <div class="item__content">{{item.contentSnippet}}</div>
@@ -16,7 +16,7 @@
                     自定义Feed
                 </div>
             </div>
-            <div class="rssItem" v-for="(item, index) in rssList" :key="index" @click="$router.push({path: '/rssList', query: {rss: item.feed, ico: item.ico}})">
+            <div class="rssItem" v-for="(item, index) in rssList" :key="index" @click="$router.push({path: '/rssList', query: {websiteId: item._id}})">
                 <div class="rssItem__ico"><img :src="item.ico" alt=""></div>
                 <div class="rssItem__title">
                     <div class="title">{{item.title}}</div>
@@ -42,36 +42,36 @@
             return {
                 active: 0,
                 rssList: [
-                    {
-                        title: '知乎每日精选',
-                        ico: 'http://img.printf520.com/img/zhihu.ico',
-                        intro: '中文互联网最大的知识平台，帮助人们便捷地分享彼此的知识、经验和见解。',
-                        feed: 'https://www.zhihu.com/rss'
-                    },
-                    {
-                        title: '36氪',
-                        ico: 'https://36kr.com/favicon.ico',
-                        intro: '让一部分人先看到未来',
-                        feed: 'https://www.36kr.com/feed'
-                    },
-                    {
-                        title: 'IT之家',
-                        ico: 'https://www.ithome.com/favicon.ico',
-                        intro: 'IT之家 - 软媒旗下网站',
-                        feed: 'https://www.ithome.com/rss/'
-                    },
+                    // {
+                    //     title: '知乎每日精选',
+                    //     ico: 'http://img.printf520.com/img/zhihu.ico',
+                    //     intro: '中文互联网最大的知识平台，帮助人们便捷地分享彼此的知识、经验和见解。',
+                    //     feed: 'https://www.zhihu.com/rss'
+                    // },
+                    // {
+                    //     title: '36氪',
+                    //     ico: 'https://36kr.com/favicon.ico',
+                    //     intro: '让一部分人先看到未来',
+                    //     feed: 'https://www.36kr.com/feed'
+                    // },
+                    // {
+                    //     title: 'IT之家',
+                    //     ico: 'https://www.ithome.com/favicon.ico',
+                    //     intro: 'IT之家 - 软媒旗下网站',
+                    //     feed: 'https://www.ithome.com/rss/'
+                    // },
                     // {
                     //     title: ' V2EX',
                     //     ico: 'https://v2ex.com/static/img/icon_rayps_64.png',
                     //     intro: 'V2EX 是一个关于分享和探索的地方',
                     //     feed: 'https://www.v2ex.com/index.xml'
                     // },
-                    {
-                        title: '少数派',
-                        ico: 'https://cdn.sspai.com/sspai/assets/img/favicon/icon.ico',
-                        intro: '少数派致力于更好地运用数字产品或科学方法，帮助用户提升工作效率和生活品质',
-                        feed: 'https://sspai.com/feed'
-                    }
+                    // {
+                    //     title: '少数派',
+                    //     ico: 'https://cdn.sspai.com/sspai/assets/img/favicon/icon.ico',
+                    //     intro: '少数派致力于更好地运用数字产品或科学方法，帮助用户提升工作效率和生活品质',
+                    //     feed: 'https://sspai.com/feed'
+                    // }
                 ],
                 feeds: []
             }
@@ -79,10 +79,21 @@
         created() {
             this.active = this.$store.state.current
             this.onGetRSSList()
+            this.onGetFeedList()
         },
         methods: {
             onGetRSSList () {
                 this.$store.dispatch('onGetRSSList')
+                    .then(res => {
+                        console.log(res)
+                        this.rssList = res.result
+                    })
+            },
+            onGetFeedList () {
+                this.$store.dispatch('onGetFeedList', {
+                    size: 20,
+                    page: 1,
+                })
                     .then(res => {
                         console.log(res)
                         this.feeds = res.result

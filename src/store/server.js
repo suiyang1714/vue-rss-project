@@ -9,9 +9,30 @@ class Server {
             params: data
         })
     }
+    onGetFeedList (data) {
+        return axios({
+            url: `${BASE_URL}/feed`,
+            method: 'GET',
+            params: data
+        })
+    }
     onCheckRss (data) {
         return axios({
             url: `${BASE_URL}/rss/check`,
+            method: 'GET',
+            params: data
+        })
+    }
+    onLogin (data) {
+        return axios({
+            url: `${BASE_URL}/user/get`,
+            method: 'GET',
+            params: data
+        })
+    }
+    onGetRssSingle (data) {
+        return axios({
+            url: `${BASE_URL}/feed/single`,
             method: 'GET',
             params: data
         })
