@@ -1,5 +1,13 @@
 <template>
     <div class="main">
+        <div class="rssItem">
+            <div class="rssItem__ico"><img :src="rss.ico" alt=""></div>
+            <div class="rssItem__title">
+                <div class="title">{{rss.title}}</div>
+                <div class="intro">{{rss.intro}}</div>
+            </div>
+            <div class="rssItem__arrow"><Icon name="star" :color="iconColor" size="20" @click.stop="onFollow()"></Icon></div>
+        </div>
         <div class="item" v-for="(item, index) in feeds" :key="index" @click="onOpenDetail(item.content)">
             <div class="item__status">
                 <div class="logo">
@@ -15,16 +23,26 @@
 </template>
 
 <script>
+    import { Icon } from 'vant';
     export default {
         name: "index",
+        components: {Icon},
         data() {
             return {
+                iconColor: '#a9a9a9',
+                rss: {},
                 active: 0,
                 feeds: []
             }
         },
         created() {
             console.log(this.$route.query)
+            this.rss = {
+                title: this.$route.query.title,
+                ico: this.$route.query.ico,
+                intro: this.$route.query.intro
+            }
+            this.onSearchFollow()
             this.onGetRSSList()
         },
         methods: {
@@ -40,6 +58,44 @@
             },
             onOpenDetail (content) {
                 this.$router.push({path: '/rssList/detail', query: {content: content}})
+            },
+            onSearchFollow () {
+                this.$store.dispatch('onSearchFollow', {
+                    userid: this.$store.state.userInfo.userid,
+                    websiteId: this.$route.query.websiteId
+                })
+                    .then(res => {
+                        console.log(res)
+                        if (res.followed) {
+                            this.iconColor = '#F3B24F'
+                        } else {
+                            this.iconColor = '#a9a9a9'
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            },
+            onFollow () {
+                console.log({
+                    userid: this.$store.state.userInfo.userid,
+                    websiteId: this.$route.query.websiteId
+                })
+                this.$store.dispatch('onFollow', {
+                    userid: this.$store.state.userInfo.userid,
+                    websiteId: this.$route.query.websiteId
+                })
+                    .then(res => {
+                        console.log(res)
+                        if (res.followed) {
+                            this.iconColor = '#F3B24F'
+                        } else {
+                            this.iconColor = '#a9a9a9'
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
             }
         }
     }
@@ -96,6 +152,46 @@
                 -webkit-line-clamp: 4;
                 -webkit-box-orient: vertical;
             }
+        }
+    }
+    .rssItem {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        height: 240px;
+        &__ico {
+            width: 40px;
+            height: 40px;
+            margin-right: 20px;
+            img {
+                display: block;
+                width: 40px;
+                height: 40px;
+            }
+        }
+        &__title {
+            flex: 1;
+            .title {
+                color: #070707;
+                font-size: 32px;
+                line-height: 40px;
+                margin-bottom: 5px;
+            }
+            .intro {
+                color: #5a5a5a;
+                font-size: 28px;
+                overflow : hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+            }
+        }
+        &__arrow {
+            width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
         }
     }
 </style>

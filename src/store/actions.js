@@ -30,5 +30,23 @@ export default {
 
         console.log(state)
         return res.data
+    },
+    async onGetFollowList ({state}, data) {
+        const res = await Server.onGetFollowList(data)
+
+        console.log(state)
+        return res.data
+    },
+    async onFollow ({state}, data) {
+        const res = await Server.onFollow(data)
+
+        console.log(state)
+        return res.data
+    },
+    async onSearchFollow ({state}, data) {
+        const res = await Server.onSearchFollow(data)
+
+        console.log(state)
+        return res.data
     }
 }

@@ -37,6 +37,29 @@ class Server {
             params: data
         })
     }
+    onGetFollowList (data) {
+        return axios({
+            url: `${BASE_URL}/user/rss/follow/list`,
+            method: 'GET',
+            params: data
+        })
+    }
+    onFollow (data) {
+        let obj = data
+        console.log(obj)
+        return axios({
+            url: `${BASE_URL}/user/rss/follow`,
+            method: 'POST',
+            data: obj
+        })
+    }
+    onSearchFollow (data) {
+        return axios({
+            url: `${BASE_URL}/user/rss/follow/search`,
+            method: 'GET',
+            params: data
+        })
+    }
 }
 
 export default new Server()

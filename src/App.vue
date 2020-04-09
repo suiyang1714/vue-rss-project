@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div v-if="isLogin">
+    <div v-if="isLogin" style="height: 100%;">
       <router-view></router-view>
     </div>
   </div>
@@ -30,7 +30,7 @@
                   console.log(err)
                 })
       }else if(!DEVELOP){
-        window.location = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww8d0e994b898e7746&redirect_uri=http://h5.snailsleep.net/rssproject/&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
+        this.$router.replace('https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww8d0e994b898e7746&redirect_uri=http://h5.snailsleep.net/rssproject/&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect')
       }else{
         this.isLogin = true;
       }

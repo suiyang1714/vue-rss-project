@@ -16,13 +16,34 @@
                     自定义Feed
                 </div>
             </div>
-            <div class="rssItem" v-for="(item, index) in rssList" :key="index" @click="$router.push({path: '/rssList', query: {websiteId: item._id}})">
+            <div class="rssItem" v-for="(item, index) in rssList" :key="index" @click="$router.push({path: '/rssList', query: {websiteId: item._id, title: item.title, ico: item.ico, intro: item.intro}})">
                 <div class="rssItem__ico"><img :src="item.ico" alt=""></div>
                 <div class="rssItem__title">
                     <div class="title">{{item.title}}</div>
                     <div class="intro">{{item.intro}}</div>
                 </div>
                 <div class="rssItem__arrow"><Icon name="arrow" color="#a9a9a9" size="20"></Icon></div>
+            </div>
+        </div>
+        <div class="main" v-else-if="$store.state.current === 2">
+            <div class="user">
+                <div class="user__info">
+                    <div class="user__info--avatar"><img :src="$store.state.userInfo.avatar" :alt="$store.state.userInfo.name" /></div>
+                    <h1>{{$store.state.userInfo.name}}</h1>
+                    <p>{{$store.state.userInfo.position}}</p>
+                </div>
+                <div class="user__con">
+                    <div class="user__con--item" @click="$router.push('/personal/collect')">
+                        <div class="avatar"><Icon name="star-o" /></div>
+                        <div class="name">订阅关注</div>
+                        <div class="btn"><Icon name="arrow" /></div>
+                    </div>
+                    <!--<div class="user__con&#45;&#45;item" @click="$router.push('/align')">-->
+                        <!--<div class="avatar"><Icon name="flag-o" /></div>-->
+                        <!--<div class="name">我的对齐</div>-->
+                        <!--<div class="btn"><Icon name="arrow" /></div>-->
+                    <!--</div>-->
+                </div>
             </div>
         </div>
         <Tabbar v-model="active" @change="onChange">
@@ -91,6 +112,7 @@
             },
             onGetFeedList () {
                 this.$store.dispatch('onGetFeedList', {
+                    userid: this.$store.state.userInfo.userid,
                     size: 20,
                     page: 1,
                 })
@@ -112,7 +134,7 @@
 
 <style scoped lang="scss">
     .page {
-        min-height: 100%;
+        height: 100%;
         display: flex;
         flex-direction: column;
     }
@@ -208,6 +230,72 @@
                 font-size: 28px;
                 line-height: 40px;
                 color: #5a5a5a;
+            }
+        }
+    }
+    .user{
+        height: calc(100% - 50px);
+        overflow-y: auto;
+        background: #f4f4f4;
+        &__info{
+            position: relative;
+            &--avatar{
+                background: #aaa;
+                text-align: center;
+                font-size: 50px;
+                color: #fff;
+                height: 320px;
+                line-height: 320px;
+                font-size: 0;
+                img{
+                    height: 320px;
+                    width: auto;
+                }
+                &::after{
+                    display: block;
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 320px;
+                    background: rgba($color: #000000, $alpha: 0.1);
+                }
+            }
+            h1{
+                font-size: 26px;
+                line-height: 30px;
+                position: absolute;
+                bottom: 33px;
+                left: 10px;
+                color: #fff;
+            }
+            p{
+                font-size: 12px;
+                line-height: 12px;
+                position: absolute;
+                bottom: 15px;
+                left: 10px;
+                color: #fff;
+            }
+        }
+        &__con{
+            padding: 16px 16px 0;
+            &--item{
+                background: #fff;
+                padding: 16px;
+                font-size: 18px;
+                border-bottom: 2px solid #eee;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                :last-child{
+                    border: 0;
+                }
+                .name{
+                    flex: 1;
+                    padding-left: 16px;
+                }
             }
         }
     }
