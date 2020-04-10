@@ -5,7 +5,7 @@ Vue.use(Router)
 import NotFoundComponent from '../pages/NotFoundComponent'
 export default new Router({
     mode: 'history',
-    // base: '/rssproject/',
+    base: '/rssproject/',
     routes: [
         {
             path: "/",

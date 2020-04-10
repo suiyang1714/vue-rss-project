@@ -30,7 +30,7 @@
                   console.log(err)
                 })
       }else if(!DEVELOP){
-        this.$router.replace('https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww8d0e994b898e7746&redirect_uri=http://h5.snailsleep.net/rssproject/&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect')
+        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww8d0e994b898e7746&redirect_uri=http://h5.snailsleep.net/rssproject/&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
       }else{
         this.isLogin = true;
       }

@@ -1,23 +1,25 @@
 <template>
-    <div class="main">
-        <div class="rssItem">
-            <div class="rssItem__ico"><img :src="rss.ico" alt=""></div>
-            <div class="rssItem__title">
-                <div class="title">{{rss.title}}</div>
-                <div class="intro">{{rss.intro}}</div>
-            </div>
-            <div class="rssItem__arrow"><Icon name="star" :color="iconColor" size="20" @click.stop="onFollow()"></Icon></div>
-        </div>
-        <div class="item" v-for="(item, index) in feeds" :key="index" @click="onOpenDetail(item.content)">
-            <div class="item__status">
-                <div class="logo">
-                    <img class="img" :src="item.websiteId.ico" />
-                    <span class="txt">{{item.websiteId.title}}</span>
+    <div class="page">
+        <div class="main"  @scroll="onScroll" ref="list">
+            <div class="rssItem">
+                <div class="rssItem__ico"><img :src="rss.ico" alt=""></div>
+                <div class="rssItem__title">
+                    <div class="title">{{rss.title}}</div>
+                    <div class="intro">{{rss.intro}}</div>
                 </div>
-                <div class="time">{{$moment(item.isoDate).toNow()}}</div>
+                <div class="rssItem__arrow"><Icon name="star" :color="iconColor" size="20" @click.stop="onFollow()"></Icon></div>
             </div>
-            <div class="item__title">{{item.title}}</div>
-            <div class="item__content">{{item.contentSnippet}}</div>
+            <div class="item" v-for="(item, index) in feeds" :key="index" @click="onOpenDetail(item.content)">
+                <div class="item__status">
+                    <div class="logo">
+                        <img class="img" :src="item.websiteId.ico" />
+                        <span class="txt">{{item.websiteId.title}}</span>
+                    </div>
+                    <div class="time">{{$moment(item.isoDate).toNow()}}</div>
+                </div>
+                <div class="item__title">{{item.title}}</div>
+                <div class="item__content">{{item.contentSnippet}}</div>
+            </div>
         </div>
     </div>
 </template>
@@ -32,7 +34,13 @@
                 iconColor: '#a9a9a9',
                 rss: {},
                 active: 0,
-                feeds: []
+                feeds: [],
+                pager: {
+                    page: 1,
+                    size: 20,
+                    total: 0
+                },
+                loading: true
             }
         },
         created() {
@@ -49,11 +57,13 @@
             onGetRSSList () {
                 this.$store.dispatch('onGetRssSingle', {
                     _id: this.$route.query.websiteId,
-                    size: 20,
-                    page: 1
+                    size: this.pager.size,
+                    page: this.pager.page
                 })
                     .then(res => {
-                        this.feeds = res.result
+                        this.pager.total = Math.ceil(res.total / this.pager.size)
+                        this.loading = true
+                        this.feeds = [...this.feeds, ...res.result]
                     })
             },
             onOpenDetail (content) {
@@ -96,16 +106,35 @@
                     .catch(err => {
                         console.log(err)
                     })
+            },
+            onScroll () {
+                let scrollHeight = this.$refs.list.scrollHeight
+                let clientHeight = this.$refs.list.clientHeight
+                let scrollTop = this.$refs.list.scrollTop
+                if (scrollTop >= scrollHeight - clientHeight * 2 && this.loading) {
+                    console.log(123)
+                    this.loading = false
+                    this.pager.page += 1
+                    if (this.pager.page <= this.pager.total) {
+                        this.onGetRSSList()
+                    }
+                }
             }
         }
     }
 </script>
 
 <style scoped lang="scss">
+    .page {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
     .main {
         background-color: #f9f9f9;
         padding: 32px 32px 100px;
-        min-height: 100%;
+        flex: 1;
+        overflow-y: scroll;
         .item {
             padding-bottom: 20px;
             border-bottom: 2px solid #f3f3f3;

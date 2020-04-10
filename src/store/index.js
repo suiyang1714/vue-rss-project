@@ -10,7 +10,7 @@ const createStore = () => {
   return new Vuex.Store({
     state: {
       userInfo: {
-          _id: '5e8ec640883956d850e35df6',
+          _id: '5e8ee5ef352afcf977e90938',
           userid: 'LinDongJiangZhi',
           name: '隋阳',
           position: '前端开发工程师',

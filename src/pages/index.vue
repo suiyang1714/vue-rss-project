@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-        <div class="main" v-if="$store.state.current === 0">
+        <div class="main" v-if="$store.state.current === 0" @scroll="onScroll" ref="list">
             <div class="item" v-for="(item, index) in feeds" :key="index" @click="onOpenDetail(item.link)">
                 <div class="item__status">
                     <div class="logo" :style="'background-image: url(' + item.websiteId.ico + ')'">{{item.websiteId.title}}</div>
@@ -62,39 +62,14 @@
         data() {
             return {
                 active: 0,
-                rssList: [
-                    // {
-                    //     title: '知乎每日精选',
-                    //     ico: 'http://img.printf520.com/img/zhihu.ico',
-                    //     intro: '中文互联网最大的知识平台，帮助人们便捷地分享彼此的知识、经验和见解。',
-                    //     feed: 'https://www.zhihu.com/rss'
-                    // },
-                    // {
-                    //     title: '36氪',
-                    //     ico: 'https://36kr.com/favicon.ico',
-                    //     intro: '让一部分人先看到未来',
-                    //     feed: 'https://www.36kr.com/feed'
-                    // },
-                    // {
-                    //     title: 'IT之家',
-                    //     ico: 'https://www.ithome.com/favicon.ico',
-                    //     intro: 'IT之家 - 软媒旗下网站',
-                    //     feed: 'https://www.ithome.com/rss/'
-                    // },
-                    // {
-                    //     title: ' V2EX',
-                    //     ico: 'https://v2ex.com/static/img/icon_rayps_64.png',
-                    //     intro: 'V2EX 是一个关于分享和探索的地方',
-                    //     feed: 'https://www.v2ex.com/index.xml'
-                    // },
-                    // {
-                    //     title: '少数派',
-                    //     ico: 'https://cdn.sspai.com/sspai/assets/img/favicon/icon.ico',
-                    //     intro: '少数派致力于更好地运用数字产品或科学方法，帮助用户提升工作效率和生活品质',
-                    //     feed: 'https://sspai.com/feed'
-                    // }
-                ],
-                feeds: []
+                rssList: [],
+                feeds: [],
+                pager: {
+                    page: 1,
+                    size: 20,
+                    total: 0
+                },
+                loading: true
             }
         },
         created() {
@@ -102,9 +77,22 @@
             this.onGetRSSList()
             this.onGetFeedList()
         },
+        computed: {
+            onUpdateUserInfo () {
+                return this.$store.state.userInfo
+            }
+        },
+        watch: {
+            onUpdateUserInfo () {
+                this.onGetRSSList()
+                this.onGetFeedList()
+            }
+        },
         methods: {
             onGetRSSList () {
-                this.$store.dispatch('onGetRSSList')
+                this.$store.dispatch('onGetRSSList', {
+                    userid: this.$store.state.userInfo._id,
+                })
                     .then(res => {
                         console.log(res)
                         this.rssList = res.result
@@ -113,12 +101,13 @@
             onGetFeedList () {
                 this.$store.dispatch('onGetFeedList', {
                     userid: this.$store.state.userInfo.userid,
-                    size: 20,
-                    page: 1,
+                    size: this.pager.size,
+                    page: this.pager.page
                 })
                     .then(res => {
-                        console.log(res)
-                        this.feeds = res.result
+                        this.pager.total = Math.ceil(res.total / this.pager.size)
+                        this.loading = true
+                        this.feeds = [...this.feeds, ...res.result]
                     })
             },
             onOpenDetail (link) {
@@ -127,6 +116,18 @@
             },
             onChange (index) {
                 this.$store.state.current = index
+            },
+            onScroll () {
+                let scrollHeight = this.$refs.list.scrollHeight
+                let clientHeight = this.$refs.list.clientHeight
+                let scrollTop = this.$refs.list.scrollTop
+                if (scrollTop >= scrollHeight - clientHeight * 2 && this.loading) {
+                    this.loading = false
+                    this.pager.page += 1
+                    if (this.pager.page <= this.pager.total) {
+                        this.onGetFeedList()
+                    }
+                }
             }
         }
     }

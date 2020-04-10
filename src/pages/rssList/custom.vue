@@ -5,7 +5,7 @@
                 center
                 clearable
                 label="订阅源"
-                placeholder="请输入订阅源1"
+                placeholder="请输入订阅源"
         >
             <template #button>
                 <Button size="small" type="info" @click="onCheckRss()">检测Feed</Button>
@@ -66,7 +66,17 @@
             },
             onsubmit () {
                 if (this.rssSuccess) {
-                    this.$toast('开发ing')
+                    this.$store.dispatch('onRssCreate', {
+                        ...this.rssData,
+                        userid: this.$store.state.userInfo._id,
+                    })
+                        .then(res => {
+                            console.log(res)
+                            this.$router.back()
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
                 } else {
                     this.$toast('订阅源未检测或者无效，请重新输入或检测')
                 }

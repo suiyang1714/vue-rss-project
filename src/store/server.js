@@ -45,12 +45,10 @@ class Server {
         })
     }
     onFollow (data) {
-        let obj = data
-        console.log(obj)
         return axios({
             url: `${BASE_URL}/user/rss/follow`,
             method: 'POST',
-            data: obj
+            data: data
         })
     }
     onSearchFollow (data) {
@@ -58,6 +56,13 @@ class Server {
             url: `${BASE_URL}/user/rss/follow/search`,
             method: 'GET',
             params: data
+        })
+    }
+    onRssCreate (data) {
+        return axios({
+            url: `${BASE_URL}/rss/create`,
+            method: 'POST',
+            data: data
         })
     }
 }

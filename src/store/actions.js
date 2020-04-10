@@ -20,10 +20,17 @@ export default {
         return res.data
     },
     async onLogin ({state}, data) {
-        const res = await Server.onLogin(data)
-
-        console.log(state)
-        return res.data
+        let res;
+        if (data.code) {
+            let d = await Server.onLogin(data);
+            state.userInfo = d.data.result;
+            localStorage.setItem('userInfo', JSON.stringify(d.result));
+            res = d.data.result;
+        } else {
+            res = JSON.parse(localStorage.getItem('userInfo'));
+        }
+        state.userInfo = res;
+        return res
     },
     async onGetRssSingle ({state}, data) {
         const res = await Server.onGetRssSingle(data)
@@ -45,6 +52,12 @@ export default {
     },
     async onSearchFollow ({state}, data) {
         const res = await Server.onSearchFollow(data)
+
+        console.log(state)
+        return res.data
+    },
+    async onRssCreate ({state}, data) {
+        const res = await Server.onRssCreate(data)
 
         console.log(state)
         return res.data
