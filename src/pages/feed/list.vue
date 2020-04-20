@@ -9,11 +9,11 @@
                 </div>
                 <div class="rssItem__arrow"><Icon name="star" :color="iconColor" size="20" @click.stop="onFollow()"></Icon></div>
             </div>
-            <div class="item" v-for="(item, index) in feeds" :key="index" @click="onOpenDetail(item.content)">
+            <div class="item" v-for="(item, index) in feeds" :key="index" @click="onOpenDetail(item.link)">
                 <div class="item__status">
                     <div class="logo">
-                        <img class="img" :src="item.websiteId.ico" />
-                        <span class="txt">{{item.websiteId.title}}</span>
+                        <img class="img" :src="item.feed.ico" />
+                        <span class="txt">{{item.feed.title}}</span>
                     </div>
                     <div class="time">{{$moment(item.isoDate).toNow()}}</div>
                 </div>
@@ -50,13 +50,13 @@
                 ico: this.$route.query.ico,
                 intro: this.$route.query.intro
             }
-            this.onSearchFollow()
-            this.onGetRSSList()
+            // this.onSearchFollow()
+            this.onGetArticles()
         },
         methods: {
-            onGetRSSList () {
-                this.$store.dispatch('onGetRssSingle', {
-                    _id: this.$route.query.websiteId,
+            onGetArticles () {
+                this.$store.dispatch('onGetArticles', {
+                    feedid: this.$route.query.feedid,
                     size: this.pager.size,
                     page: this.pager.page
                 })
@@ -66,8 +66,11 @@
                         this.feeds = [...this.feeds, ...res.result]
                     })
             },
-            onOpenDetail (content) {
-                this.$router.push({path: '/rssList/detail', query: {content: content}})
+            onOpenDetail (link) {
+                if (link) {
+                    window.location.href = link
+                }
+                // this.$router.push({path: '/feed/detail', query: {content: content}})
             },
             onSearchFollow () {
                 this.$store.dispatch('onSearchFollow', {
@@ -116,7 +119,7 @@
                     this.loading = false
                     this.pager.page += 1
                     if (this.pager.page <= this.pager.total) {
-                        this.onGetRSSList()
+                        this.onGetArticles()
                     }
                 }
             }
@@ -145,10 +148,10 @@
                 font-size: 24px;
                 margin-bottom: 20px;
                 /*.logo {*/
-                    /*color: #ababab;*/
-                    /*padding-left: 30px;*/
-                    /*background: no-repeat left center;*/
-                    /*background-size: 24px 24px;*/
+                /*color: #ababab;*/
+                /*padding-left: 30px;*/
+                /*background: no-repeat left center;*/
+                /*background-size: 24px 24px;*/
                 /*}*/
                 .logo {
                     display: flex;

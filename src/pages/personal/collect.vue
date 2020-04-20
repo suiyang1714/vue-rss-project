@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-        <div class="rssItem" v-for="(item, index) in rssList" :key="index" @click="$router.push({path: '/rssList', query: {websiteId: item._id}})">
+        <div class="rssItem" v-for="(item, index) in rssList" :key="index" @click="$router.push({path: '/feed', query: {websiteId: item._id}})">
             <div class="rssItem__ico"><img :src="item.ico" alt=""></div>
             <div class="rssItem__title">
                 <div class="title">{{item.title}}</div>

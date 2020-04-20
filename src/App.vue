@@ -17,7 +17,6 @@
     },
     created () {
       let code = this.base_getUrl('code');
-      console.log(code)
       if (code) {
         this.$store.dispatch('onLogin', {
           code: code

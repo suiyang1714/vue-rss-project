@@ -2,9 +2,9 @@ import axios from 'axios'
 import { BASE_URL } from '../config'
 
 class Server {
-    onGetRSSList (data) {
+    onGetUserArticle (data) {
         return axios({
-            url: `${BASE_URL}/rss`,
+            url: `${BASE_URL}/feed/user/article`,
             method: 'GET',
             params: data
         })
@@ -16,11 +16,11 @@ class Server {
             params: data
         })
     }
-    onCheckRss (data) {
+    onFeedPushCreate (data) {
         return axios({
-            url: `${BASE_URL}/rss/check`,
-            method: 'GET',
-            params: data
+            url: `${BASE_URL}/feed/push/create`,
+            method: 'POST',
+            data: data
         })
     }
     onLogin (data) {
@@ -30,37 +30,30 @@ class Server {
             params: data
         })
     }
-    onGetRssSingle (data) {
+    onGetArticles (data) {
         return axios({
-            url: `${BASE_URL}/feed/single`,
+            url: `${BASE_URL}/feed/single/article`,
             method: 'GET',
             params: data
         })
     }
-    onGetFollowList (data) {
+    onGetUserFeedPush (data) {
         return axios({
-            url: `${BASE_URL}/user/rss/follow/list`,
+            url: `${BASE_URL}/feed/push/user/list`,
             method: 'GET',
             params: data
         })
     }
-    onFollow (data) {
+    onSearchFeed (data) {
         return axios({
-            url: `${BASE_URL}/user/rss/follow`,
-            method: 'POST',
-            data: data
-        })
-    }
-    onSearchFollow (data) {
-        return axios({
-            url: `${BASE_URL}/user/rss/follow/search`,
+            url: `${BASE_URL}/feed/search`,
             method: 'GET',
             params: data
         })
     }
-    onRssCreate (data) {
+    onUpdateFeedTag (data) {
         return axios({
-            url: `${BASE_URL}/rss/create`,
+            url: `${BASE_URL}/feed/push/update`,
             method: 'POST',
             data: data
         })

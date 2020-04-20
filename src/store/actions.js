@@ -1,8 +1,8 @@
 import Server from './server'
 
 export default {
-    async onGetRSSList ({state}, data) {
-        const res = await Server.onGetRSSList(data)
+    async onGetUserArticle ({state}, data) {
+        const res = await Server.onGetUserArticle(data)
 
         console.log(state)
         return res.data
@@ -13,8 +13,14 @@ export default {
         console.log(state)
         return res.data
     },
-    async onCheckRss ({state}, data) {
-        const res = await Server.onCheckRss(data)
+    async onFeedPushCreate ({state}, data) {
+        const res = await Server.onFeedPushCreate(data)
+
+        console.log(state)
+        return res.data
+    },
+    async onGetArticles ({state}, data) {
+        const res = await Server.onGetArticles(data)
 
         console.log(state)
         return res.data
@@ -32,32 +38,20 @@ export default {
         state.userInfo = res;
         return res
     },
-    async onGetRssSingle ({state}, data) {
-        const res = await Server.onGetRssSingle(data)
+    async onSearchFeed ({state}, data) {
+        const res = await Server.onSearchFeed(data)
 
         console.log(state)
         return res.data
     },
-    async onGetFollowList ({state}, data) {
-        const res = await Server.onGetFollowList(data)
+    async onGetUserFeedPush ({state}, data) {
+        const res = await Server.onGetUserFeedPush(data)
 
         console.log(state)
         return res.data
     },
-    async onFollow ({state}, data) {
-        const res = await Server.onFollow(data)
-
-        console.log(state)
-        return res.data
-    },
-    async onSearchFollow ({state}, data) {
-        const res = await Server.onSearchFollow(data)
-
-        console.log(state)
-        return res.data
-    },
-    async onRssCreate ({state}, data) {
-        const res = await Server.onRssCreate(data)
+    async onUpdateFeedTag ({state}, data) {
+        const res = await Server.onUpdateFeedTag(data)
 
         console.log(state)
         return res.data

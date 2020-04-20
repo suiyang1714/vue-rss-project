@@ -3,7 +3,7 @@
         <div class="main" v-if="$store.state.current === 0" @scroll="onScroll" ref="list">
             <div class="item" v-for="(item, index) in feeds" :key="index" @click="onOpenDetail(item.link)">
                 <div class="item__status">
-                    <div class="logo" :style="'background-image: url(' + item.websiteId.ico + ')'">{{item.websiteId.title}}</div>
+                    <div class="logo" :style="'background-image: url(' + item.feed.ico + ')'">{{item.feed.title}}</div>
                     <div class="time">{{$moment(item.pubDate).toNow()}}</div>
                 </div>
                 <div class="item__title">{{item.title}}</div>
@@ -12,15 +12,15 @@
         </div>
         <div class="main" v-else-if="$store.state.current === 1">
             <div class="menu">
-                <div class="btn" @click="$router.push('/rsslist/custom')">
+                <div class="btn" @click="$router.push('/feed/custom')">
                     自定义Feed
                 </div>
             </div>
-            <div class="rssItem" v-for="(item, index) in rssList" :key="index" @click="$router.push({path: '/rssList', query: {websiteId: item._id, title: item.title, ico: item.ico, intro: item.intro}})">
-                <div class="rssItem__ico"><img :src="item.ico" alt=""></div>
+            <div class="rssItem" v-for="(item, index) in feedList" :key="index" @click="$router.push({path: '/feed', query: {feedid: item.feed._id, title: item.feed.title, ico: item.feed.ico, intro: item.feed.intro}})">
+                <div class="rssItem__ico"><img :src="item.feed.ico" alt=""></div>
                 <div class="rssItem__title">
-                    <div class="title">{{item.title}}</div>
-                    <div class="intro">{{item.intro}}</div>
+                    <div class="title">{{item.feed.title}}</div>
+                    <div class="intro">{{item.feed.intro}}</div>
                 </div>
                 <div class="rssItem__arrow"><Icon name="arrow" color="#a9a9a9" size="20"></Icon></div>
             </div>
@@ -33,21 +33,21 @@
                     <p>{{$store.state.userInfo.position}}</p>
                 </div>
                 <div class="user__con">
-                    <div class="user__con--item" @click="$router.push('/personal/collect')">
-                        <div class="avatar"><Icon name="star-o" /></div>
-                        <div class="name">订阅关注</div>
-                        <div class="btn"><Icon name="arrow" /></div>
-                    </div>
-                    <!--<div class="user__con&#45;&#45;item" @click="$router.push('/align')">-->
-                        <!--<div class="avatar"><Icon name="flag-o" /></div>-->
-                        <!--<div class="name">我的对齐</div>-->
+                    <!--<div class="user__con&#45;&#45;item" @click="$router.push('/personal/collect')">-->
+                        <!--<div class="avatar"><Icon name="star-o" /></div>-->
+                        <!--<div class="name">订阅关注</div>-->
                         <!--<div class="btn"><Icon name="arrow" /></div>-->
                     <!--</div>-->
+                    <div class="user__con--item" @click="$router.push('/personal/push')">
+                        <div class="avatar"><Icon name="fire-o" /></div>
+                        <div class="name">订阅推送</div>
+                        <div class="btn"><Icon name="arrow" /></div>
+                    </div>
                 </div>
             </div>
         </div>
         <Tabbar v-model="active" @change="onChange">
-            <TabbarItem icon="home-o">订阅</TabbarItem>
+            <TabbarItem icon="wap-home-o">订阅</TabbarItem>
             <TabbarItem icon="home-o">订阅源</TabbarItem>
             <TabbarItem icon="ellipsis">其他</TabbarItem>
         </Tabbar>
@@ -62,7 +62,7 @@
         data() {
             return {
                 active: 0,
-                rssList: [],
+                feedList: [],
                 feeds: [],
                 pager: {
                     page: 1,
@@ -74,8 +74,8 @@
         },
         created() {
             this.active = this.$store.state.current
-            this.onGetRSSList()
             this.onGetFeedList()
+            this.onGetUserArticle()
         },
         computed: {
             onUpdateUserInfo () {
@@ -84,23 +84,23 @@
         },
         watch: {
             onUpdateUserInfo () {
-                this.onGetRSSList()
                 this.onGetFeedList()
+                this.onGetUserArticle()
             }
         },
         methods: {
-            onGetRSSList () {
-                this.$store.dispatch('onGetRSSList', {
+            onGetFeedList () {
+                this.$store.dispatch('onGetFeedList', {
                     userid: this.$store.state.userInfo._id,
                 })
                     .then(res => {
                         console.log(res)
-                        this.rssList = res.result
+                        this.feedList = res.result
                     })
             },
-            onGetFeedList () {
-                this.$store.dispatch('onGetFeedList', {
-                    userid: this.$store.state.userInfo.userid,
+            onGetUserArticle () {
+                this.$store.dispatch('onGetUserArticle', {
+                    userid: this.$store.state.userInfo._id,
                     size: this.pager.size,
                     page: this.pager.page
                 })
@@ -111,7 +111,7 @@
                     })
             },
             onOpenDetail (link) {
-                // this.$router.push({path: '/rssList', query: {rss: item.link}})
+                // this.$router.push({path: '/feed', query: {rss: item.link}})
                 window.location.href = link
             },
             onChange (index) {
@@ -125,7 +125,7 @@
                     this.loading = false
                     this.pager.page += 1
                     if (this.pager.page <= this.pager.total) {
-                        this.onGetFeedList()
+                        this.onGetUserArticle()
                     }
                 }
             }
