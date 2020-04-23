@@ -249,6 +249,7 @@
                 line-height: 320px;
                 font-size: 0;
                 img{
+                    display: inline-block;
                     height: 320px;
                     width: auto;
                 }
@@ -264,29 +265,29 @@
                 }
             }
             h1{
-                font-size: 26px;
-                line-height: 30px;
+                font-size: 46px;
+                line-height: 60px;
                 position: absolute;
-                bottom: 33px;
-                left: 10px;
+                bottom: 66px;
+                left: 20px;
                 color: #fff;
             }
             p{
-                font-size: 12px;
-                line-height: 12px;
+                font-size: 24px;
+                line-height: 24px;
                 position: absolute;
-                bottom: 15px;
-                left: 10px;
+                bottom: 30px;
+                left: 20px;
                 color: #fff;
             }
         }
         &__con{
-            padding: 16px 16px 0;
+            padding: 32px 0 0;
             &--item{
                 background: #fff;
-                padding: 16px;
-                font-size: 18px;
-                border-bottom: 2px solid #eee;
+                padding: 32px;
+                font-size: 36px;
+                border-bottom: 4px solid #eee;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;

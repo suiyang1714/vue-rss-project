@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-        <div class="logo"><img src="../../assets/logo@3x.png" alt=""></div>
+        <div class="logo"><img src="@/assets/logo@3x.png" alt=""></div>
         <div class="flex">
             <div class="item" v-for="(item, index) in feedList" v-bind:key="index" @click="onSelectWebsite(index)">
                 <div class="item__ico"><img :src="item.feed.ico" alt=""></div>
@@ -57,7 +57,9 @@
                 })
                     .then(res => {
                         this.feedList = res.result
-                        this.tags = this.feedList[this.active].tags
+                        if (this.feedList.length !== 0) {
+                            this.tags = this.feedList[this.active].tags
+                        }
                     })
             },
             onSwitch (item) {

@@ -1,24 +1,13 @@
 <template>
     <div class="page">
         <div class="main">
-            <Search v-model="search" @input="onSearchFeed" placeholder="请输入搜索关键词，例如：36氪" />
+            <Search v-model="search" @input="onSearchFeed" placeholder="请输入搜索订阅源关键词，例如：36氪" />
             <div class="search__result">
                 <div class="item" v-for="(item, index) in searchList" v-bind:key="index" @click="onSelectFeed(item)">
                     <div class="item__ico"><img :src="item.ico" alt=""></div>
                     <div class="item__title">{{item.title}}</div>
                 </div>
             </div>
-            <!--<Field-->
-            <!--v-model="rssData.feed"-->
-            <!--center-->
-            <!--clearable-->
-            <!--label="订阅源"-->
-            <!--placeholder="请输入订阅源"-->
-            <!--&gt;-->
-            <!--<template #button>-->
-            <!--<Button size="small" type="info" @click="onCheckRss()">检测Feed</Button>-->
-            <!--</template>-->
-            <!--</Field>-->
             <Field v-model="feedData.title"
                    label="订阅源名称"
                    placeholder="" readonly />
@@ -28,7 +17,7 @@
                     autosize
                     label="关键词"
                     type="textarea"
-                    placeholder=""
+                    placeholder="请输入关键词"
             >
                 <template #button>
                     <Button size="small" type="info" @click="onAddTag()">新增</Button>
@@ -60,6 +49,9 @@
                 tag:''
             }
         },
+        created() {
+          this.onSearchFeed('')
+        },
         methods: {
             onFeedPushCreate () {
                 this.$store.dispatch('onFeedPushCreate', {
@@ -76,7 +68,7 @@
                     })
             },
             onSearchFeed (val) {
-                if (val !== '') {
+                // if (val !== '') {
                     this.$store.dispatch('onSearchFeed', {
                         search: val
                     })
@@ -88,7 +80,7 @@
                         .catch(err => {
                             console.log(err)
                         })
-                }
+                // }
             },
             onSelectFeed (data) {
                 this.search = ''
@@ -130,6 +122,8 @@
     .search {
         &__result {
             /*background-color: #000;*/
+            max-height: 400px;
+            overflow-y: scroll;
             .item {
                 height: 96px;
                 display: flex;
